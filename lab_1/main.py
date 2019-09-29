@@ -12,10 +12,10 @@ def calculate_frequences(text: str) -> dict:
         return {}
     text = text.lower()
     for c in text:
+        if c == ' ':
+            continue
         if c.isalpha() == False:
-            text = text.replace(c, ' ')
-    while '  ' in text:
-        text = text.replace('  ', ' ')
+            text = text.replace(c, '')
     list_of_words = text.split()
     dict_of_freqs = {}
     for elem in list_of_words:
