@@ -29,7 +29,18 @@ def filter_stop_words(frequencies: dict, stop_words: tuple) -> dict:
     """
     Removes all stop words from the given frequencies dictionary
     """
-    return 'hello. it IS me'
+    if isinstance(frequencies, dict) == False or frequencies == {}:
+        return {}
+    freq_dict_str_only = {}
+    for k, v in frequencies.items():
+        if isinstance(k, str):
+            freq_dict_str_only[k] = v
+    if isinstance(stop_words, tuple) == False:
+        return freq_dict_str_only
+    for elem in stop_words:
+        while elem in freq_dict_str_only:
+            del freq_dict_str_only[elem]
+    return freq_dict_str_only
 
 def get_top_n(frequencies: dict, top_n: int) -> tuple:
     """
