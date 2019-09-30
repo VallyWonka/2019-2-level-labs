@@ -8,13 +8,15 @@ def calculate_frequences(text: str) -> dict:
     """
     Calculates number of times each word appears in the text
     """
-    if isinstance(text, str) == False or text == '' or (text.isalpha() == False and text.count(' ') == 0):
+    if not isinstance(text, str) \
+            or text == '' \
+            or (not text.isalpha() and text.count(' ') == 0):
         return {}
     text = text.lower()
     for c in text:
         if c == ' ':
             continue
-        if c.isalpha() == False:
+        if not c.isalpha():
             text = text.replace(c, '')
     list_of_words = text.split()
     dict_of_freqs = {}
@@ -25,28 +27,31 @@ def calculate_frequences(text: str) -> dict:
             dict_of_freqs[elem] = 1
     return dict_of_freqs
 
+
 def filter_stop_words(frequencies: dict, stop_words: tuple) -> dict:
     """
     Removes all stop words from the given frequencies dictionary
     """
-    if isinstance(frequencies, dict) == False or frequencies == {}:
+    if not isinstance(frequencies, dict) \
+            or frequencies == {}:
         return {}
     freq_dict_str_only = {}
     for k, v in frequencies.items():
         if isinstance(k, str):
             freq_dict_str_only[k] = v
-    if isinstance(stop_words, tuple) == False:
+    if not isinstance(stop_words, tuple):
         return freq_dict_str_only
     for elem in stop_words:
         while elem in freq_dict_str_only:
             del freq_dict_str_only[elem]
     return freq_dict_str_only
 
+
 def get_top_n(frequencies: dict, top_n: int) -> tuple:
     """
     Takes first N popular words
     """
-    if (not isinstance(top_n, int)) or (not isinstance(frequencies, dict)) or (frequencies == {}) or (top_n <= 0):
+    if frequencies == {} or top_n <= 0:
         return ()
     freqs_list = list(frequencies.items())
     top_words = ()
