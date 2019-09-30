@@ -46,4 +46,12 @@ def get_top_n(frequencies: dict, top_n: int) -> tuple:
     """
     Takes first N popular words
     """
-    pass
+    if (not isinstance(top_n, int)) or (not isinstance(frequencies, dict)) or (frequencies == {}) or (top_n <= 0):
+        return ()
+    if n >= len(frequencies):
+        return frequencies
+    freqs_list = list(frequencies.items())
+    top_words = ()
+    for i in range(top_n):
+        top_words += freqs_list[i][0]
+    return top_words
