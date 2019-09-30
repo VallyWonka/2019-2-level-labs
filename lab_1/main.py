@@ -53,5 +53,5 @@ def get_top_n(frequencies: dict, top_n: int) -> tuple:
     freqs_list = list(frequencies.items())
     top_words = ()
     for i in range(top_n):
-        top_words += freqs_list[i][0]
+        top_words += tuple(freqs_list[i][0])
     return top_words
