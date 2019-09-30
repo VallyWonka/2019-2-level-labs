@@ -48,7 +48,7 @@ def get_top_n(frequencies: dict, top_n: int) -> tuple:
     """
     if (not isinstance(top_n, int)) or (not isinstance(frequencies, dict)) or (frequencies == {}) or (top_n <= 0):
         return ()
-    if n >= len(frequencies):
+    if top_n >= len(frequencies):
         return frequencies
     freqs_list = list(frequencies.items())
     top_words = ()
