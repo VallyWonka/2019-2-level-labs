@@ -13,11 +13,11 @@ def calculate_frequences(text: str) -> dict:
             or (not text.isalpha() and text.count(' ') == 0):
         return {}
     text = text.lower()
-    for c in text:
-        if c == ' ':
+    for char in text:
+        if char == ' ':
             continue
-        if not c.isalpha():
-            text = text.replace(c, '')
+        if not char.isalpha():
+            text = text.replace(char, '')
     list_of_words = text.split()
     dict_of_freqs = {}
     for elem in list_of_words:
@@ -36,9 +36,9 @@ def filter_stop_words(frequencies: dict, stop_words: tuple) -> dict:
             or frequencies == {}:
         return {}
     freq_dict_str_only = {}
-    for k, v in frequencies.items():
-        if isinstance(k, str):
-            freq_dict_str_only[k] = v
+    for key, value in frequencies.items():
+        if isinstance(key, str):
+            freq_dict_str_only[key] = value
     if not isinstance(stop_words, tuple):
         return freq_dict_str_only
     for elem in stop_words:
@@ -57,8 +57,8 @@ def get_top_n(frequencies: dict, top_n: int) -> tuple:
     top_words = ()
     if top_n >= len(frequencies):
         for i in range(len(frequencies)):
-            top_words += freqs_list[i][0],
+            top_words += (freqs_list[i][0],)
         return top_words
     for i in range(top_n):
-        top_words += freqs_list[i][0],
+        top_words += (freqs_list[i][0],)
     return top_words
