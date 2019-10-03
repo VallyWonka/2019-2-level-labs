@@ -12,9 +12,10 @@ def read_from_file(path_to_file: str, lines_limit: int) -> str:
                 text += data.readline()
     return text
 
-# path_to_file = 'C:\\data.txt'
-# lines_limit = 5
-# print(read_from_file(path_to_file, lines_limit))
+
+# PATH_TO_FILE = 'C:\\data.txt'
+# LINES_LIMIT = 5
+# print(read_from_file(PATH_TO_FILE, LINES_LIMIT))
 
 
 def calculate_frequences(text: str) -> dict:
@@ -75,3 +76,39 @@ def get_top_n(frequencies: dict, top_n: int) -> tuple:
     for i in range(top_n):
         top_words += (freqs_list[i][0],)
     return top_words
+
+
+def write_to_file(path_to_file: str, content: tuple):
+    if isinstance(path_to_file, str) and isinstance(content, tuple):
+        with open(path_to_file, 'w') as file:
+            for elem in content:
+                elem += '\n'
+                file.write(elem)
+
+
+# def create_content(freqs_dict: dict):
+    # content = ()
+    # list_of_words = list(freqs_dict.items())
+    # list_of_words.sort(key=lambda i: i[1], reverse=True)
+    # for elem in list_of_words:
+        # content += (elem[0], )
+    # return content
+
+
+# PATH_TO_FILE = 'C:\\report.txt'
+# FREQS_DICT = calculate_frequences('''
+# Als ich noch ein Knabe war,
+# Sperrte man mich ein;
+# Und so sass ich manches Jahr
+# Ueber mir allein,
+# Wie in Mutterleib.
+
+# Doch du warst mein Zeitvertreib,
+# Goldne Phantasie.
+# Und ich ward ein warmer Held,
+# Wie der Prinz Pipi,
+# Und durchzog die Welt.''')
+
+
+# CONTENT = create_content(FREQS_DICT)
+# write_to_file(PATH_TO_FILE, CONTENT)
