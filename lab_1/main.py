@@ -4,6 +4,19 @@ Count frequencies dictionary by the given arbitrary text
 """
 
 
+def read_from_file(path_to_file: str, lines_limit: int) -> str:
+    text = ''
+    if isinstance(path_to_file, str) and isinstance(lines_limit, int) and lines_limit >= 0:
+        with open(path_to_file) as data:
+            for i in range(lines_limit):
+                text += data.readline()
+    return text
+
+# path_to_file = 'C:\\data.txt'
+# lines_limit = 5
+# print(read_from_file(path_to_file, lines_limit))
+
+
 def calculate_frequences(text: str) -> dict:
     """
     Calculates number of times each word appears in the text
