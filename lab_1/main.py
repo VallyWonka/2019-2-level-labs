@@ -46,18 +46,15 @@ def filter_stop_words(frequencies: dict, stop_words: tuple) -> dict:
     """
     Removes all stop words from the given frequencies dictionary
     """
-    if not isinstance(frequencies, dict) \
-            or frequencies == {}:
-        return {}
     freq_dict_str_only = {}
-    for key, value in frequencies.items():
-        if isinstance(key, str):
-            freq_dict_str_only[key] = value
-    if not isinstance(stop_words, tuple):
-        return freq_dict_str_only
-    for elem in stop_words:
-        while elem in freq_dict_str_only:
-            del freq_dict_str_only[elem]
+    if frequencies:
+        for key, value in frequencies.items():
+            if isinstance(key, str):
+                freq_dict_str_only[key] = value
+    if stop_words:
+        for elem in stop_words:
+            if elem in freq_dict_str_only:
+                del freq_dict_str_only[elem]
     return freq_dict_str_only
 
 
@@ -66,7 +63,7 @@ def get_top_n(frequencies: dict, top_n: int) -> tuple:
     Takes first N popular words
     """
     top_words = ()
-    if len(frequencies) > 0 and top_n > 0:
+    if frequencies and top_n > 0:
         freqs_list = list(frequencies.items())
         if top_n >= len(frequencies):
             for i in range(len(frequencies)):
