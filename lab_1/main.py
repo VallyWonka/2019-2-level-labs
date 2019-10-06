@@ -39,10 +39,10 @@ def filter_stop_words(frequencies: dict, stop_words: tuple) -> dict:
     freq_dict_str_only = {}
     if frequencies:
         freq_dict_str_only = {key: value for key, value in frequencies.items() if isinstance(key, str)}
-    if stop_words:
-        for elem in stop_words:
-            if elem in freq_dict_str_only:
-                del freq_dict_str_only[elem]
+        if stop_words:
+            for elem in stop_words:
+                if elem in freq_dict_str_only:
+                    del freq_dict_str_only[elem]
     return freq_dict_str_only
 
 
