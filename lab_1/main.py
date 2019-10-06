@@ -22,23 +22,13 @@ def calculate_frequences(text: str) -> dict:
     """
     Calculates number of times each word appears in the text
     """
-    if not isinstance(text, str) \
-            or text == '' \
-            or (not text.isalpha() and text.count(' ') == 0):
-        return {}
-    text = text.lower()
-    for char in text:
-        if char == ' ':
-            continue
-        if not char.isalpha():
-            text = text.replace(char, '')
-    list_of_words = text.split()
     dict_of_freqs = {}
-    for elem in list_of_words:
-        if elem in dict_of_freqs:
-            dict_of_freqs[elem] += 1
-        else:
-            dict_of_freqs[elem] = 1
+    if isinstance(text, str) and text != '':
+        text = text.lower()
+        for char in text:
+            if not char.isalpha() and char != ' ':
+                text = text.replace(char, ' ')
+        dict_of_freqs = {elem: text.split().count(elem) for elem in text.split()}
     return dict_of_freqs
 
 
@@ -48,9 +38,7 @@ def filter_stop_words(frequencies: dict, stop_words: tuple) -> dict:
     """
     freq_dict_str_only = {}
     if frequencies:
-        for key, value in frequencies.items():
-            if isinstance(key, str):
-                freq_dict_str_only[key] = value
+        freq_dict_str_only = {key: value for key, value in frequencies.items() if isinstance(key, str)}
     if stop_words:
         for elem in stop_words:
             if elem in freq_dict_str_only:
@@ -66,11 +54,9 @@ def get_top_n(frequencies: dict, top_n: int) -> tuple:
     if frequencies and top_n > 0:
         freqs_list = list(frequencies.items())
         if top_n >= len(frequencies):
-            for i in range(len(frequencies)):
-                top_words += (freqs_list[i][0],)
+            top_words = tuple([freqs_list[i][0] for i in range(len(frequencies))])
         else:
-            for i in range(top_n):
-                top_words += (freqs_list[i][0],)
+            top_words = tuple([freqs_list[i][0] for i in range(top_n)])
     return top_words
 
 
