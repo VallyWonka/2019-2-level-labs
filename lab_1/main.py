@@ -53,6 +53,7 @@ def get_top_n(frequencies: dict, top_n: int) -> tuple:
     top_words = ()
     if frequencies and top_n > 0:
         freqs_list = list(frequencies.items())
+        freqs_list.sort(key=lambda i: i[1], reverse=True)
         if top_n >= len(frequencies):
             top_words = tuple([freqs_list[i][0] for i in range(len(frequencies))])
         else:
