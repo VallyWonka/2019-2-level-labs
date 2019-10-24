@@ -22,76 +22,88 @@ def calculate_frequences(text: str) -> dict:
     """
     Calculates number of times each word appears in the text
     """
-    dict_of_freqs = {}
-    if isinstance(text, str) and text != '':
-        text = text.lower()
-        for char in text:
-            if not char.isalpha() and char != ' ':
-                text = text.replace(char, ' ')
-        dict_of_freqs = {elem: text.split().count(elem) for elem in text.split()}
-    return dict_of_freqs
+    frequencies = {}
+    new_text = ''
+    if text is None:
+        return frequencies
+    if not isinstance(text, str):
+        text = str(text)
+    for symbol in text:
+        if symbol.isalpha() or symbol == ' ':
+            new_text += symbol
+    new_text = new_text.lower()
+    words = new_text.split()
+    for key in words:
+        key = key.lower()
+        if key in frequencies:
+            value = frequencies[key]
+            frequencies[key] = value + 1
+        else:
+            frequencies[key] = 1
+    return frequencies
 
 
 def filter_stop_words(frequencies: dict, stop_words: tuple) -> dict:
     """
     Removes all stop words from the given frequencies dictionary
     """
-    freq_dict_str_only = {}
-    if frequencies:
-        freq_dict_str_only = {key: value for key, value in frequencies.items() if isinstance(key, str)}
-        if stop_words:
-            for elem in stop_words:
-                if elem in freq_dict_str_only:
-                    del freq_dict_str_only[elem]
-    return freq_dict_str_only
+    if frequencies is None:
+        frequencies = {}
+        return frequencies
+    for word in list(frequencies):
+        if not isinstance(word, str):
+            del frequencies[word]
+    if not isinstance(stop_words, tuple):
+        return frequencies
+    for word in stop_words:
+        if not isinstance(word, str):
+            continue
+        if frequencies.get(word) is not None:
+            del frequencies[word]
+    return frequencies
 
 
 def get_top_n(frequencies: dict, top_n: int) -> tuple:
     """
     Takes first N popular words
+    :param
     """
-    top_words = ()
-    if frequencies and top_n > 0:
-        freqs_list = list(frequencies.items())
-        freqs_list.sort(key=lambda i: i[1], reverse=True)
-        if top_n >= len(frequencies):
-            top_words = tuple([freqs_list[i][0] for i in range(len(frequencies))])
-        else:
-            top_words = tuple([freqs_list[i][0] for i in range(top_n)])
-    return top_words
+    if not isinstance(top_n, int):
+        frequencies = ()
+        return frequencies
+    if top_n < 0:
+        top_n = 0
+    elif top_n > len(frequencies):
+        top_n = len(frequencies)
+    top_words = sorted(frequencies, key=lambda x: int(frequencies[x]), reverse=True)
+    best = tuple(top_words[:top_n])
+    return best
+
+
+def read_from_file(path_to_file: str, lines_limit: int) -> str:
+    """
+    Read text from file
+    """
+    file = open(path_to_file)
+    counter = 0
+    text = ''
+    if file is None:
+        return text
+    for line in file:
+        text += line
+        counter += 1
+        if counter == lines_limit:
+            break
+    file.close()
+    return text
 
 
 def write_to_file(path_to_file: str, content: tuple):
-    if isinstance(path_to_file, str) and isinstance(content, tuple):
-        with open(path_to_file, 'w') as file:
-            for elem in content:
-                elem += '\n'
-                file.write(elem)
-
-
-# def create_content(freqs_dict: dict):
-    # content = ()
-    # list_of_words = list(freqs_dict.items())
-    # list_of_words.sort(key=lambda i: i[1], reverse=True)
-    # for elem in list_of_words:
-        # content += (elem[0], )
-    # return content
-
-
-# PATH_TO_FILE = 'C:\\report.txt'
-# FREQS_DICT = calculate_frequences('''
-# Als ich noch ein Knabe war,
-# Sperrte man mich ein;
-# Und so sass ich manches Jahr
-# Ueber mir allein,
-# Wie in Mutterleib.
-
-# Doch du warst mein Zeitvertreib,
-# Goldne Phantasie.
-# Und ich ward ein warmer Held,
-# Wie der Prinz Pipi,
-# Und durchzog die Welt.''')
-
-
-# CONTENT = create_content(FREQS_DICT)
-# write_to_file(PATH_TO_FILE, CONTENT)
+    """
+    Creates new file
+    """
+    file = open(path_to_file, 'w')
+    for i in content:
+        file.write(i)
+        file.write('\n')
+    file.close()
