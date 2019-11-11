@@ -92,3 +92,111 @@ def save_to_csv(edit_matrix: tuple, path_to_file: str) -> None:
             for col in row:
                 line += (str(col) + ',')
             file.write(line[:-1] + '\n')
+
+            
+def describe_edits(edit_matrix: tuple,
+                   original_word: str,
+                   target_word: str) -> list:
+    steps = []
+    if all(char not in list(target_word) for char in list(original_word)):
+        if len(original_word) > len(target_word):
+            steps = ['substitute {} with {}'.format(x, y) for x, y in
+                     zip(list(original_word[:len(target_word)]), list(target_word))] \
+                    + ['remove {}'.format(x) for x in list(original_word[len(target_word):])]
+        else:
+            steps = ['substitute {} with {}'.format(x, y) for x, y in
+                     zip(list(original_word), list(target_word[:len(original_word)]))] \
+                    + ['insert {}'.format(x) for x in list(target_word[len(original_word):])]
+    else:
+        # find common strings
+        common_chars_row = ''
+        row_indices = []
+        for ind, elem in enumerate(edit_matrix[-1][1:]):
+            if elem < edit_matrix[-1][ind]:
+                common_chars_row += target_word[ind]
+                row_indices.append(ind)
+        last_col = [row[-1] for row in edit_matrix]
+        common_chars_col = ''
+        col_indices = []
+        for ind, elem in enumerate(last_col[1:]):
+            if elem < last_col[ind]:
+                common_chars_col += original_word[ind]
+                col_indices.append(ind)
+        # check validity
+        common_possibilities = [common_chars_row, common_chars_col]
+        indices = [row_indices, col_indices]
+        original_word_temp = original_word
+        for char in original_word:
+            if char not in common_chars_row:
+                original_word_temp = original_word_temp.replace(char, '')
+        if common_chars_row not in original_word_temp:
+            common_possibilities.remove(common_chars_row)
+            indices.remove(row_indices)
+        target_word_temp = target_word
+        for char in target_word:
+            if char not in common_chars_col:
+                target_word_temp = target_word_temp.replace(char, '')
+        if common_chars_col not in target_word_temp:
+            common_possibilities.remove(common_chars_col)
+            indices.remove(col_indices)
+        # forming descriptions list
+        # before common strings
+        beginning_targ = target_word[:indices[0][0]]
+        beginning_orig = original_word[:original_word.find(common_possibilities[0][0])]
+        if beginning_targ != '' and beginning_orig != '':
+            if len(beginning_targ) > len(beginning_orig):
+                actions_orig = ['substitute {} with {}'.format(x, y) for x, y in
+                                zip(beginning_orig, beginning_targ[:len(beginning_orig)])]
+                actions_targ = ['insert {}'.format(char) for char in beginning_targ[len(beginning_orig):]]
+                steps += actions_orig + actions_targ
+            else:
+                actions_targ = ['substitute {} with {}'.format(x, y) for x, y in
+                                zip(beginning_orig[:len(beginning_targ)], beginning_targ)]
+                actions_orig = ['remove {}'.format(char) for char in beginning_orig[len(beginning_targ):]]
+                steps += actions_targ + actions_orig
+        elif beginning_targ != '':
+            steps += ['insert {}'.format(char) for char in
+                      target_word[indices[0][0]:]]
+        elif beginning_orig != '':
+            steps += ['remove {}'.format(char) for char in
+                      original_word[:original_word.find(common_possibilities[0][0])]]
+        # inside common strings
+        for ind, char in enumerate(common_possibilities[0][:-1], 1):
+            inside_orig = original_word[original_word.find(char) + 1:original_word.find(common_possibilities[0][ind])]
+            inside_targ = target_word[target_word.find(char) + 1:target_word.find(common_possibilities[0][ind])]
+            if inside_orig and inside_targ:
+                if len(inside_targ) > len(inside_orig):
+                    actions_orig = ['substitute {} with {}'.format(x, y) for x, y in
+                                    zip(inside_orig, inside_targ[:len(inside_orig)])]
+                    actions_targ = ['insert {}'.format(char) for char in inside_targ[len(inside_orig):]]
+                    steps += actions_orig + actions_targ
+                else:
+                    actions_targ = ['substitute {} with {}'.format(x, y) for x, y in
+                                    zip(inside_orig[:len(inside_targ)], inside_targ)]
+                    actions_orig = ['remove {}'.format(char) for char in inside_orig[len(inside_targ):]]
+                    steps += actions_targ + actions_orig
+            elif inside_orig:
+                steps += ['remove {}'.format(char) for char in inside_orig]
+            elif inside_targ:
+                steps += ['insert {}'.format(char) for char in inside_targ]
+        # ends of words
+        remaining_targ = target_word[indices[0][-1] + 1:]
+        remaining_orig = original_word[:original_word.find(common_possibilities[0][-1]):-1]
+        if remaining_targ != '' and remaining_orig != '':
+            if len(remaining_targ) > len(remaining_orig):
+                actions_orig = ['substitute {} with {}'.format(x, y) for x, y in
+                                zip(remaining_orig[::-1], remaining_targ[:len(remaining_orig)])]
+                actions_targ = ['insert {}'.format(char) for char in remaining_targ[len(remaining_orig):]]
+                steps += actions_orig + actions_targ
+            else:
+                actions_targ = ['substitute {} with {}'.format(x, y) for x, y in
+                                zip(remaining_orig[:len(remaining_targ)][::-1], remaining_targ)]
+                actions_orig = ['remove {}'.format(char) for char in remaining_orig[len(remaining_targ):]]
+                steps += actions_targ + actions_orig
+        elif remaining_targ != '':
+            steps += ['insert {}'.format(char) for char in
+                      target_word[indices[0][-1] + 1:]]
+        elif remaining_orig != '':
+            steps += ['remove {}'.format(char) for char in
+                      original_word[:original_word.find(common_possibilities[0][-1]):-1][::-1]]
+    return steps            
