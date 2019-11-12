@@ -171,7 +171,7 @@ def describe_edits(edit_matrix: tuple,
                             actions_orig = ['substitute {} with {}'.format(x, y) for x, y in
                                             zip(inside_orig, inside_targ[:len(inside_orig)])]
                             actions_targ = ['insert {}'.format(char) for char in inside_targ[len(inside_orig):]]
-                            steps += actions_orig + actions_targ
+                            steps_1 += actions_orig + actions_targ
                         else:
                             actions_targ = ['substitute {} with {}'.format(x, y) for x, y in
                                             zip(inside_orig[:len(inside_targ)], inside_targ)]
@@ -273,7 +273,7 @@ def describe_edits(edit_matrix: tuple,
         steps_1 = by_row_description(original_word, target_word, common_chars_row, row_indices)
         steps_2 = by_col_description(original_word, target_word, common_chars_col, col_indices)
         if steps_1 and steps_2:
-            steps = sorted([steps, steps_2], key=len)[0]
+            steps = sorted([steps_1, steps_2], key=len)[0]
         elif steps_2:
             steps = steps_2
         else:
