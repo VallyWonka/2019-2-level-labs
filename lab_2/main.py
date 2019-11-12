@@ -241,7 +241,6 @@ def describe_edits(edit_matrix: tuple,
                         steps_2 += ['remove {}'.format(char) for char in inside_orig]
                     elif inside_targ:
                         steps_2 += ['insert {}'.format(char) for char in inside_targ]
-                        print(inside_targ, 'I am here')
                 # ends of words
                 remaining_targ = target_word[::-1][:target_word[::-1].find(common_chars_col[-1])]
                 remaining_orig = original_word[col_indices[-1] + 1:]
