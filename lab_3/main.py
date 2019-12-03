@@ -26,11 +26,11 @@ class WordStorage:
             return self.storage[word]
         return -1
 
-    def get_original_by(self, id: int) -> str:
+    def get_original_by(self, id_num: int) -> str:
         ids = list(self.storage.values())
         words = list(self.storage.keys())
-        if isinstance(id, int) and id in ids:
-            index = ids.index(id)
+        if isinstance(id_num, int) and id_num in ids:
+            index = ids.index(id_num)
             return words[index]
         return 'UNK'
 
@@ -66,7 +66,6 @@ class NGramTrie:
             if combination not in self.gram_log_probabilities:
                 prefix = combination[:-1]
                 prefix_values = [self.gram_frequencies[gram] for gram in self.gram_frequencies if gram[:-1] == prefix]
-                print(prefix, prefix_values)
                 log_probability = math.log((self.gram_frequencies[combination] / sum(prefix_values)))
                 self.gram_log_probabilities[combination] = log_probability
         return self.gram_log_probabilities
