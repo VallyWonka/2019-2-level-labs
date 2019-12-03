@@ -2,7 +2,6 @@
 Labour work #2. Levenstein distance.
 """
 
-
 def load_from_csv(path_to_file: str) -> list:
     with open(path_to_file) as file:
         edit_matrix = []
@@ -10,7 +9,7 @@ def load_from_csv(path_to_file: str) -> list:
         if '' in data:
             data.remove('')
         for row in data:
-            edit_matrix.append(row.split(','))
+            edit_matrix.append([int(num) for num in row.split(',')])
     return edit_matrix
 
 
@@ -85,32 +84,11 @@ def find_distance(original_word: str,
     return full_matrix[-1][-1]
 
 
-def save_to_csv(edit_matrix: list, path_to_file: str) -> None:
-    if not isinstance(edit_matrix, list) or not isinstance(path_to_file, str):
-        return None
-    with open(path_to_file, "w") as file:
+def save_to_csv(edit_matrix: tuple, path_to_file: str) -> None:
+    with open(path_to_file, 'w') as file:
         for row in edit_matrix:
-            for element in row:
-                file.write(str(element))
-                if row.index(element) != len(row) - 1:
-                    file.write(',')
-            if edit_matrix.index(row) != len(edit_matrix) - 1:
-                file.write('\n')
-    return None
-
-
-def load_from_csv(path_to_file: str) -> list:
-    if not isinstance(path_to_file, str):
-        return []
-    with open(path_to_file) as file:
-        matrix_from_file = file.readlines()
-        matrix = []
-        for element in matrix_from_file:
-            element = element.replace('\n', '')
-            numbers = element.split(',')
-            to_add = list(map(int, numbers))
-            matrix.append(to_add)
-    return matrix
+            line = ','.join([str(col) for col in row])
+            file.write(line + '\n')
 
 
 def search_for_path(matrix: list, ind_1: int, ind_2: int, number=0) -> int:
