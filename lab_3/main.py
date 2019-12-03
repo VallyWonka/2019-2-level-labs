@@ -78,7 +78,7 @@ class NGramTrie:
             grams = list(self.gram_log_probabilities.keys())
             prefixes = [gram[:-1] for gram in grams]
             while prefix in prefixes:
-                with_prefix = [gram for gram in grams if gram[0] == prefix[0]]
+                with_prefix = [gram for gram in grams if gram[:-1] == prefix]
                 values = [value for key, value in self.gram_log_probabilities.items() if key in with_prefix]
                 ind = values.index(max(values))
                 sentence.append(with_prefix[ind][-1])
@@ -106,7 +106,7 @@ def split_by_sentence(text: str) -> list:
             continue
         if not char.isalpha() and char not in ".!?":
             text = text.replace(char, '')
-    if all(symbol not in text for symbol in ' .!?'):  # redo the check although works
+    if all(symbol not in text for symbol in ' .!?'):
         return []
     sentences = []
     counter = 0
