@@ -20,6 +20,7 @@ class WordStorage:
             id_num = list(self.storage.values())[-1] + 1 if self.storage else 0
             self.storage[word] = id_num
             return id_num
+        return None
 
     def get_id_of(self, word: str) -> int:
         if isinstance(word, str) and word in self.storage:
