@@ -2,17 +2,6 @@
 Labour work #2. Levenstein distance.
 """
 
-def load_from_csv(path_to_file: str) -> list:
-    with open(path_to_file) as file:
-        edit_matrix = []
-        data = file.read().split('\n')
-        if '' in data:
-            data.remove('')
-        for row in data:
-            edit_matrix.append([int(num) for num in row.split(',')])
-    return edit_matrix
-
-
 def generate_edit_matrix(num_rows: int, num_cols: int) -> list:
     edit_matrix = []
     if isinstance(num_rows, int) and isinstance(num_cols, int):
