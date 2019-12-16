@@ -70,8 +70,10 @@ class TfIdfCalculator:
             value = self.tf_idf_values[document_index][word]
         except (TypeError, IndexError, KeyError):
             return ()
-        sorted_by_tfidf = sorted(self.tf_idf_values[document_index].items(), key=lambda x: -x[1])
-        rating = [array[0] for array in sorted_by_tfidf].index(word)
+        possible_tfidfs = sorted(set(self.tf_idf_values[document_index].values()), reverse=True)
+        rating = possible_tfidfs.index(self.tf_idf_values[document_index][word])
+        # sorted_by_tfidf = sorted(self.tf_idf_values[document_index].items(), key=lambda x: -x[1])
+        # rating = [array[0] for array in sorted_by_tfidf].index(word)
         return value, rating
 
     def dump_report_csv(self):
