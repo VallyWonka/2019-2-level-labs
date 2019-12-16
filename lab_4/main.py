@@ -1,3 +1,9 @@
+"""
+Laboratory Work # 4
+TF-IDF Calculator
+"""
+
+
 import math
 
 
@@ -19,7 +25,7 @@ def clean_tokenize_corpus(texts: list) -> list:
 
 
 class TfIdfCalculator:
-    def __init__(self, corpus=[]):
+    def __init__(self, corpus=0):
         self.corpus = corpus
         self.tf_values = []
         self.idf_values = {}
@@ -130,19 +136,16 @@ class TfIdfCalculator:
         return cosine_distance
 
 
-
 if __name__ == '__main__':
-    tf_idf = TfIdfCalculator()
-    texts = ['5_7.txt', '15_2.txt', '10547_3.txt', '12230_7.txt']
-    for text in texts:
-        with open(text, 'r') as f:
+    TEXTS = ['5_7.txt', '15_2.txt', '10547_3.txt', '12230_7.txt']
+    for txt in TEXTS:
+        with open(txt, 'r') as f:
             REFERENCE_TEXTS.append(f.read())
-            tf_idf.file_names.append(text)
     # scenario to check your work
-    test_texts = clean_tokenize_corpus(REFERENCE_TEXTS)
-    tf_idf.corpus = test_texts
-    tf_idf.calculate_tf()
-    tf_idf.calculate_idf()
-    tf_idf.calculate()
-    print(tf_idf.report_on('good', 0))
-    print(tf_idf.report_on('and', 1))
+    TEST_TEXTS = clean_tokenize_corpus(REFERENCE_TEXTS)
+    TF_IDF = TfIdfCalculator(TEST_TEXTS)
+    TF_IDF.calculate_tf()
+    TF_IDF.calculate_idf()
+    TF_IDF.calculate()
+    print(TF_IDF.report_on('good', 0))
+    print(TF_IDF.report_on('and', 1))
