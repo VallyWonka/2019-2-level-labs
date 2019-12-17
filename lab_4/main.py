@@ -104,9 +104,9 @@ class TfIdfCalculator:
                         file_list.append('0')
                 file_line = ','.join(file_list)
                 file_lines.append(file_line + '\n')
-        with open('report.csv', 'w') as file:
-            file.write(head)
-            file.writelines(file_lines)
+            with open('report.csv', 'w') as file:
+                file.write(head)
+                file.writelines(file_lines)
 
     def cosine_distance(self, index_text_1, index_text_2):
         try:
