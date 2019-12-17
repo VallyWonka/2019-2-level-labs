@@ -139,15 +139,19 @@ class TfIdfCalculator:
 
 
 if __name__ == '__main__':
+    TF_IDF = TfIdfCalculator()
     TEXTS = ['5_7.txt', '15_2.txt', '10547_3.txt', '12230_7.txt']
     for txt in TEXTS:
         with open(txt, 'r') as f:
             REFERENCE_TEXTS.append(f.read())
+            TF_IDF.file_names.append(txt)
     # scenario to check your work
     TEST_TEXTS = clean_tokenize_corpus(REFERENCE_TEXTS)
-    TF_IDF = TfIdfCalculator(TEST_TEXTS)
+    TF_IDF.corpus = TEST_TEXTS
     TF_IDF.calculate_tf()
     TF_IDF.calculate_idf()
     TF_IDF.calculate()
     print(TF_IDF.report_on('good', 0))
     print(TF_IDF.report_on('and', 1))
+    TF_IDF.dump_report_csv()
+    
